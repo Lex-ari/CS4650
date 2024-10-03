@@ -14,10 +14,9 @@ class WindTemperature(MRJob):
         if (temp != "+9999" 
             and re.match(QUALITY_RE, wind_quality)
             and wind_heading != "999"):
-            yield wind_heading, {"temp":int(temp), "count":1}
+            yield int(wind_heading), {"temp":int(temp), "count":1}
     
     def reducer(self, key, values):
-        example = ''
         count = 0
         min_temp = None
         max_temp = None
@@ -31,6 +30,8 @@ class WindTemperature(MRJob):
             max_temp = max(max_temp, reading_temp)
             count += reading["count"]
         yield key, {"low":min_temp, "high":max_temp, "count":count}
+        
+        
             
     
 if __name__ == '__main__':
